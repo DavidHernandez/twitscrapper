@@ -1,6 +1,6 @@
 import mongoengine as db
 from . import config
-from twarc import Twarc
+from twarc.client2 import Twarc2
 
 db.connect(
         config.MONGO_DB,
@@ -10,7 +10,7 @@ db.connect(
         password=config.MONGO_PASSWORD
         )
 
-twitter = Twarc(
+twitter = Twarc2(
         config.TWITTER_CONSUMER_KEY,
         config.TWITTER_CONSUMER_SECRET,
         config.TWITTER_TOKEN,

@@ -39,7 +39,7 @@ Rx==1.6.1
 six==1.16.0
 starlette==0.14.2
 tqdm==4.62.2
-twarc==2.4.3
+twarc==2.9.2
 typing-extensions==3.10.0.1
 ujson==4.1.0
 urllib3==1.26.6

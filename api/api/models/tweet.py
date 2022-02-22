@@ -1,55 +1,9 @@
 from ..config import db
 
 
-class User(db.EmbeddedDocument):
-    id = db.IntField(db_field='id', primary_key=True)
-    name = db.StringField()
-    handle = db.StringField()
-    followers = db.IntField()
-    following = db.IntField()
-    tweets = db.IntField()
-    profile_pic = db.StringField()
-
-    def __str__(self):
-        return "@{}".format(self.name)
-
-    def add(self, field, value):
-        setattr(self, field, value)
-
-
-class Hashtag(db.EmbeddedDocument):
-    tag = db.StringField()
-
 class Mention(db.EmbeddedDocument):
     id = db.IntField()
-    name = db.StringField()
     handle = db.StringField()
-
-class Url(db.EmbeddedDocument):
-    url = db.StringField()
-    real_url = db.StringField()
-
-class Entities(db.EmbeddedDocument):
-    hashtags = db.EmbeddedDocumentListField(Hashtag)
-    mentions = db.EmbeddedDocumentListField(Mention)
-    urls = db.EmbeddedDocumentListField(Url)
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.hashtags = []
-        self.mentions = []
-        self.urls = []
-
-    def add_url(self, url, real_url=None):
-        if real_url == None:
-            real_url = url
-        self.urls.append(Url(url=url, real_url=real_url))
-
-    def add_hashtag(self, tag):
-        self.hashtags.append(Hashtag(tag=tag))
-
-    def add_mention(self, id, name, handle):
-        self.mentions.append(Mention(id=id, name=name, handle=handle))
 
 class Tag(db.EmbeddedDocument):
     topic = db.StringField()
@@ -111,18 +65,31 @@ class Tagged(db.EmbeddedDocument):
 
 class Tweet(db.Document):
     id = db.IntField(primary_key=True)
+    author_id = db.IntField()
     created = db.StringField()
     text = db.StringField()
+    language = db.StringField()
+
     retweeted = db.IntField()
     liked = db.IntField()
-    author = db.EmbeddedDocumentField(User)
-    entities = db.EmbeddedDocumentField(Entities)
-    language = db.StringField()
+    replies = db.IntField()
+    quotes = db.IntField()
+
     tagged = db.EmbeddedDocumentListField(Tagged, default=list)
+
+    hashtags = db.ListField(db.StringField(), default=list)
+    mentions = db.EmbeddedDocumentListField(Mention, default=list)
+    urls = db.ListField(db.StringField(), default=list)
+
+    raw = db.DynamicField()
+
+    impact_score = db.FloatField()
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.entities = Entities()
+        self.hashtags = []
+        self.mentions = []
+        self.urls = []
 
     def __str__(self):
         return "{}: {}".format(self.author, self.text)
@@ -148,14 +115,14 @@ class Tweet(db.Document):
     def has_tags(self):
         return any(tagged.has_topics for tagged in self.tagged)
 
-    def add_author(self):
-        self.author = User()
-
-    def add_url(self, url, real_url=None):
-        self.entities.add_url(url, real_url)
-
-    def add_mention(self, id, name, handle):
-        self.entities.add_mention(id, name, handle)
+    def add_url(self, url):
+        self.urls.append(url)
 
     def add_hashtag(self, tag):
-        self.entities.add_hashtag(tag)
+        self.hashtags.append(tag)
+
+    def add_mention(self, id, handle):
+        self.mentions.append(Mention(id=id, handle=handle))
+
+    def calculate_impact_score(self):
+        self.impact_score = self.replies * 0.3 + self.quotes * 0.3 + self.retweeted * 0.2 + self.liked * 0.1

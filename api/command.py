@@ -2,6 +2,7 @@ import sys
 
 from api.repositories.tweets import Tweets
 from api.services.user_tweets import get_user_tweets
+from api.services.user_lookup import lookup_user
 from api.services.tag_tweet import tag_tweet
 from api.services.generate_stats import generate_stats
 
@@ -43,10 +44,16 @@ def stats():
         count += 1
     print('Done')
 
+def get_user(handle):
+    print('Getting profile from @' + handle)
+    user = lookup_user(handle)
+    # print(user)
+
 commands = {
     'timeline': get_timeline,
     'tag': tag_all,
     'stats': stats,
+    'user': get_user,
 }
 
 args = sys.argv

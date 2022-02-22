@@ -1,38 +1,59 @@
 from ..config import twitter
 from ..models.tweet import Tweet
+from ..repositories.users import Users
+from .user_lookup import lookup_user
 
 def get_user_tweets(handle):
-    tweets = twitter.timeline(screen_name=handle)
+    if handle.isdigit():
+        user_id = handle
+    else:
+        try:
+            user = Users.get(handle)
+        except:
+            users = lookup_user(handle)
+            user = users[0] 
+        user_id = user['id']
+
+    tweets = twitter.timeline(user_id)
     result = []
-    for tweet_data in tweets:
-        tweet = Tweet(
-            id=tweet_data['id'],
-            created=tweet_data['created_at'],
-            text=tweet_data['full_text'],
-            retweeted=tweet_data['retweet_count'],
-            liked=tweet_data['favorite_count'],
-            language=tweet_data['lang']
-        )
 
-        tweet.add_author()
-        tweet.author.id = tweet_data['user']['id']
-        tweet.author.name = tweet_data['user']['name']
-        tweet.author.handle = tweet_data['user']['screen_name']
-        tweet.author.followers = tweet_data['user']['followers_count']
-        tweet.author.following = tweet_data['user']['friends_count']
-        tweet.author.tweets = tweet_data['user']['statuses_count']
-        tweet.author.profile_pic = tweet_data['user']['profile_image_url_https']
+    for page in tweets:
+        for tweet_data in page['data']:
+            metrics = tweet_data['public_metrics']
 
-        for hashtag in tweet_data['entities']['hashtags']:
-            tweet.add_hashtag(hashtag['text'])
+            tweet = Tweet(
+                id=tweet_data['id'],
+                author_id=tweet_data['author_id'],
+                created=tweet_data['created_at'],
+                text=tweet_data['text'],
 
-        for url in tweet_data['entities']['urls']:
-            tweet.add_url(url['url'], url['expanded_url'])
+                retweeted=metrics['retweet_count'],
+                liked=metrics['like_count'],
+                replies=metrics['reply_count'],
+                quotes=metrics['quote_count'],
 
-        for mention in tweet_data['entities']['user_mentions']:
-            tweet.add_mention(mention['id'], mention['name'], mention['screen_name'])
+                language=tweet_data['lang'],
 
-        tweet.save()
+                raw=tweet_data
+            )
 
-        result.append(tweet)
+            if 'entities' in tweet_data:
+                entities = tweet_data['entities']
+                if 'hashtags' in entities:
+                    for hashtag in entities['hashtags']:
+                        tweet.add_hashtag(hashtag['tag'])
+
+                if 'urls' in entities:
+                    for url in entities['urls']:
+                        tweet.add_url(url['expanded_url'])
+
+                if 'user_mentions' in entities:
+                    for mention in entities['user_mentions']:
+                        tweet.add_mention(mention['id'], mention['username'])
+
+            tweet.calculate_impact_score()
+            tweet.save()
+            result.append(tweet)
+
     return result
+
