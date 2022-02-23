@@ -1,5 +1,7 @@
 from ..config import db
 
+import re
+
 
 class Mention(db.EmbeddedDocument):
     id = db.IntField()
@@ -63,6 +65,30 @@ class Tagged(db.EmbeddedDocument):
             'tags': list(map(lambda tag_set: tag_set.serialize(), self.tags))
         }
 
+class TweetOperations(db.EmbeddedDocument):
+    tags = db.BooleanField(default=False)
+    retweets = db.BooleanField(default=False)
+    likes = db.BooleanField(default=False)
+    quotes = db.BooleanField(default=False)
+    replies = db.BooleanField(default=False)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.tags = False
+        self.retweets = False
+        self.likes = False
+        self.quotes = False
+        self.replies = False
+
+    def has(self, operation):
+        return getattr(self, operation)
+
+    def mark(self, operation):
+        setattr(self, operation, True)
+
+    def unmark(self, operation):
+        setattr(self, operation, False)
+
 class Tweet(db.Document):
     id = db.IntField(primary_key=True)
     author_id = db.IntField()
@@ -85,17 +111,21 @@ class Tweet(db.Document):
 
     impact_score = db.FloatField()
 
+    operations = db.EmbeddedDocumentField(TweetOperations)
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.hashtags = []
         self.mentions = []
         self.urls = []
+        self.operations = TweetOperations()
 
     def __str__(self):
-        return "{}: {}".format(self.author, self.text)
+        return "{}: {}".format(self.id, self.text)
 
     def untag(self):
         self.tagged = []
+        self.operations.unmark('tags')
 
     def add_tag(self, kb, is_public, topic, subtopic, tag_name, times):
         tagged = list(filter(lambda tagged: tagged.knowledgebase == kb, self.tagged))
@@ -106,6 +136,7 @@ class Tweet(db.Document):
             tagged = Tagged(knowledgebase=kb, public=is_public, topics=[], tags=[])
             self.tagged.append(tagged)
 
+        self.operations.mark('tags')
         tagged.add_tag(topic, subtopic, tag_name, times)
 
     def remove_single_occurences(self):
@@ -126,3 +157,10 @@ class Tweet(db.Document):
 
     def calculate_impact_score(self):
         self.impact_score = self.replies * 0.3 + self.quotes * 0.3 + self.retweeted * 0.2 + self.liked * 0.1
+
+    def has(self, operation):
+        return self.operations.has(operation)
+
+    @property
+    def clean_text(self):
+        return self.text.encode('utf-8')

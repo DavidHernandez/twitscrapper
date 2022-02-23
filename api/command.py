@@ -23,7 +23,7 @@ def get_timeline(handle):
     print('Imported ' + str(len(tweets)) + ' tweets')
 
 def tag_all():
-    tweets = Tweets.all()
+    tweets = Tweets.untagged()
     total = str(len(tweets))
     print('Tagging all ' + total + ' tweets')
     count = 1
@@ -32,6 +32,11 @@ def tag_all():
         tag_tweet(tweet)
         count += 1
     print('Done')
+
+def tag(id):
+    tweet = Tweets.get(id)
+    print(tweet)
+    tag_tweet(tweet)
 
 def stats():
     tweets = Tweets.all()
@@ -51,7 +56,8 @@ def get_user(handle):
 
 commands = {
     'timeline': get_timeline,
-    'tag': tag_all,
+    'tag_all': tag_all,
+    'tag': tag,
     'stats': stats,
     'user': get_user,
 }

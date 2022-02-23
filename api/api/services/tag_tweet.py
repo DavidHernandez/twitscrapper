@@ -1,7 +1,13 @@
 from ..utils.tagger import tag_text
 
 def tag_tweet(tweet):
-    tagger_response = tag_text(tweet.text)
+    print(f"Tagging tweet {tweet.id}")
+    try:
+        tagger_response = tag_text(tweet.clean_text)
+    except:
+        # Error tagging, skipping
+        print("Skipping because of error")
+        return
     tags = tagger_response['result']['tags']
     tweet.untag()
     for tag in tags:

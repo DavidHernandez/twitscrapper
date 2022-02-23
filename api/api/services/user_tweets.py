@@ -7,9 +7,8 @@ def get_user_tweets(handle):
     if handle.isdigit():
         user_id = handle
     else:
-        try:
-            user = Users.get(handle)
-        except:
+        user = Users.get(handle)
+        if not user:
             users = lookup_user(handle)
             user = users[0] 
         user_id = user['id']
@@ -47,8 +46,8 @@ def get_user_tweets(handle):
                     for url in entities['urls']:
                         tweet.add_url(url['expanded_url'])
 
-                if 'user_mentions' in entities:
-                    for mention in entities['user_mentions']:
+                if 'mentions' in entities:
+                    for mention in entities['mentions']:
                         tweet.add_mention(mention['id'], mention['username'])
 
             tweet.calculate_impact_score()
