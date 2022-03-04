@@ -1,4 +1,5 @@
 from ..config import db
+from datetime import datetime, timedelta
 
 import re
 
@@ -23,6 +24,39 @@ class Tag(db.EmbeddedDocument):
             'tag': self.tag,
             'times': self.times
         }
+
+class Date(db.EmbeddedDocument): 
+    year = db.IntField()
+    month = db.IntField()
+    day = db.IntField()
+    hour = db.IntField()
+    minute = db.IntField()
+    day_of_week = db.IntField()
+
+
+    @staticmethod
+    def from_iso_8061(iso_date):
+        format = '%Y-%m-%dT%H:%M:%S.000Z'
+        parsed_date = datetime.strptime(iso_date, format)
+        #fix timezone
+        parsed_date += timedelta(hours=1)
+
+        date = Date(
+                    year=parsed_date.year,
+                    month=parsed_date.month,
+                    day=parsed_date.day,
+                    hour=parsed_date.hour,
+                    minute=parsed_date.minute,
+                    day_of_week=parsed_date.weekday()
+                )
+        return date
+
+    @property
+    def weekday(self):
+        daymap = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+        return daymap[self.day_of_week]
+
+
 
 class Tagged(db.EmbeddedDocument):
     knowledgebase = db.StringField()
@@ -56,7 +90,7 @@ class Tagged(db.EmbeddedDocument):
         self.topics = sorted(list(set([tag['topic'] for tag in self.tags])))
 
     def has_topics(self):
-        return len(topics) > 0
+        return len(self.topics) > 0
 
     def serialize(self):
         return {
@@ -101,6 +135,10 @@ class Tweet(db.Document):
     replies = db.IntField()
     quotes = db.IntField()
 
+    retweeters = db.ListField(db.IntField(), default=list)
+    like_list = db.ListField(db.IntField(), default=list)
+    reply_list = db.ListField(db.IntField(), default=list)
+
     tagged = db.EmbeddedDocumentListField(Tagged, default=list)
 
     hashtags = db.ListField(db.StringField(), default=list)
@@ -112,20 +150,26 @@ class Tweet(db.Document):
     impact_score = db.FloatField()
 
     operations = db.EmbeddedDocumentField(TweetOperations)
+    created_date = db.EmbeddedDocumentField(Date)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.hashtags = []
         self.mentions = []
         self.urls = []
+        self.retweeters = []
+        self.like_list = []
+        self.reply_list = []
         self.operations = TweetOperations()
 
     def __str__(self):
         return "{}: {}".format(self.id, self.text)
 
-    def untag(self):
-        self.tagged = []
-        self.operations.unmark('tags')
+    def calculate_impact_score(self):
+        self.impact_score = self.replies * 0.3 + self.quotes * 0.3 + self.retweeted * 0.2 + self.liked * 0.1
+
+    def has_tags(self):
+        return any(tagged.has_topics for tagged in self.tagged)
 
     def add_tag(self, kb, is_public, topic, subtopic, tag_name, times):
         tagged = list(filter(lambda tagged: tagged.knowledgebase == kb, self.tagged))
@@ -139,12 +183,13 @@ class Tweet(db.Document):
         self.operations.mark('tags')
         tagged.add_tag(topic, subtopic, tag_name, times)
 
+    def untag(self):
+        self.tagged = []
+        self.operations.unmark('tags')
+
     def remove_single_occurences(self):
         for tagged in self.tagged:
             tagged.remove_single_occurences()
-
-    def has_tags(self):
-        return any(tagged.has_topics for tagged in self.tagged)
 
     def add_url(self, url):
         self.urls.append(url)
@@ -155,12 +200,73 @@ class Tweet(db.Document):
     def add_mention(self, id, handle):
         self.mentions.append(Mention(id=id, handle=handle))
 
-    def calculate_impact_score(self):
-        self.impact_score = self.replies * 0.3 + self.quotes * 0.3 + self.retweeted * 0.2 + self.liked * 0.1
+    def add_like(self, user_id):
+        self.mark('likes')
+        if user_id not in self.like_list:
+            self.like_list.append(user_id)
+
+    def add_retweeter(self, user_id):
+        self.mark('retweets')
+        if user_id not in self.retweeters:
+            self.retweeters.append(user_id)
+
+    def add_reply(self, tweet_id):
+        self.mark('replies')
+        if tweet_id not in self.reply_list:
+            self.reply_list.append(tweet_id)
 
     def has(self, operation):
         return self.operations.has(operation)
 
+    def mark(self, operation):
+        return self.operations.mark(operation)
+
+    def unmark(self, operation):
+        return self.operations.unmark(operation)
+
     @property
     def clean_text(self):
         return self.text.encode('utf-8')
+
+    @staticmethod
+    def from_json(json):
+        metrics = json['public_metrics']
+
+        tweet = Tweet(
+            id=json['id'],
+            author_id=json['author_id'],
+            created=json['created_at'],
+            text=json['text'],
+
+            retweeted=metrics['retweet_count'],
+            liked=metrics['like_count'],
+            replies=metrics['reply_count'],
+            quotes=metrics['quote_count'],
+
+            language=json['lang'],
+
+            raw=json
+        )
+
+        if 'entities' in json:
+            entities = json['entities']
+            if 'hashtags' in entities:
+                for hashtag in entities['hashtags']:
+                    tweet.add_hashtag(hashtag['tag'])
+
+            if 'urls' in entities:
+                for url in entities['urls']:
+                    tweet.add_url(url['expanded_url'])
+
+            if 'mentions' in entities:
+                for mention in entities['mentions']:
+                    tweet.add_mention(mention['id'], mention['username'])
+
+        tweet.calculate_impact_score()
+        tweet.parse_date()
+        tweet.save()
+
+        return tweet
+
+    def parse_date(self):
+        self.created_date = Date.from_iso_8061(self.created)

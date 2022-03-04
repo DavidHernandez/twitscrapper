@@ -1,7 +1,6 @@
 from ..utils.tagger import tag_text
 
 def tag_tweet(tweet):
-    print(f"Tagging tweet {tweet.id}")
     try:
         tagger_response = tag_text(tweet.clean_text)
     except:
