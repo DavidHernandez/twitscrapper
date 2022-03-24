@@ -130,7 +130,7 @@ def all_replies():
 def account_top_tweets(handle):
     print(f'Getting top tweets from {handle}')
     tweets = top_tweets(handle)
-    return tweets
+    print(tweets)
 
 commands = {
     'timeline': get_timeline,
