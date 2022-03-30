@@ -1,7 +1,7 @@
 from ..config import db
 
 class List(db.Document):
-    id = db.IntField(db_field='id', primary_key=True)
+    author_id = db.IntField(db_field='id', primary_key=True)
     name = db.StringField()
     owner_list = db.StringField()
     raw = db.DynamicField()
@@ -11,12 +11,12 @@ class List(db.Document):
 
     @staticmethod
     def from_json(json):
-        listMembership = List(
+        new_list = List(
             id=json['id'],
             name=json['name'],
             owner_list= json['owner_list'],
             raw=json
         )
 
-        listMembership.save()
-        return listMembership
+        new_list.save()
+        return new_list
