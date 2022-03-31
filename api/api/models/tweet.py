@@ -154,13 +154,6 @@ class Tweet(db.Document):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.hashtags = []
-        self.mentions = []
-        self.urls = []
-        self.retweeters = []
-        self.like_list = []
-        self.reply_list = []
-        self.operations = TweetOperations()
 
     def __str__(self):
         return "{}: {}".format(self.id, self.text)
@@ -270,3 +263,6 @@ class Tweet(db.Document):
 
     def parse_date(self):
         self.created_date = Date.from_iso_8061(self.created)
+
+    def to_json(self):
+        return self.raw

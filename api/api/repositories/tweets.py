@@ -16,7 +16,11 @@ class Tweets():
 
     @staticmethod
     def by_author(author_id):
-        return Tweets.by_query({'author_id': author_id})
+        return Tweets.by_query({'author_id': int(author_id)})
+
+    @staticmethod
+    def last(author_id):
+        return Tweets.by_author(author_id).order_by('-created').limit(1).first()
 
     @staticmethod
     def by_query(query):
@@ -37,3 +41,15 @@ class Tweets():
     @staticmethod
     def top_by_account(author_id):
         return Tweets.by_query({'author_id': author_id, 'text': {'$regex': '^(?!RT @).*'}}).order_by('-impact_score')
+
+    @staticmethod
+    def top_liked_from_account(author_id):
+        return Tweets.by_query({'author_id': author_id, 'text': {'$regex': '^(?!RT @).*'}}).order_by('-liked')
+
+    @staticmethod
+    def top_retweeted_from_account(author_id):
+        return Tweets.by_query({'author_id': author_id, 'text': {'$regex': '^(?!RT @).*'}}).order_by('-retweeted')
+
+    @staticmethod
+    def top_replied_from_account(author_id):
+        return Tweets.by_query({'author_id': author_id, 'text': {'$regex': '^(?!RT @).*'}}).order_by('-replies')

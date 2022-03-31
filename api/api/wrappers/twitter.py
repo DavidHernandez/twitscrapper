@@ -19,8 +19,8 @@ class Twitter():
             config.TWITTER_TOKEN_SECRET
         )
 
-    def timeline(self, user_id):
-        return self.v2.timeline(user_id)
+    def timeline(self, user_id, since_id=None):
+        return self.v2.timeline(user_id, since_id=since_id)
 
     def mentions(self, user_id):
         return self.v2.mentions(user_id)

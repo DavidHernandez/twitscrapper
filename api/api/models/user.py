@@ -3,6 +3,7 @@ from ..config import db
 
 class UserOperations(db.EmbeddedDocument):
     mentions = db.BooleanField(default=False)
+    tweets = db.BooleanField(default=False)
     followers = db.BooleanField(default=False)
     following = db.BooleanField(default=False)
     lists = db.BooleanField(default=False)
@@ -10,11 +11,6 @@ class UserOperations(db.EmbeddedDocument):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.mentions = False
-        self.followers = False
-        self.following = False
-        self.lists = False
-        self.profession = False
 
     def has(self, operation):
         return getattr(self, operation)
@@ -44,10 +40,11 @@ class User(db.Document):
 
     operations = db.EmbeddedDocumentField(UserOperations)
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.operations = UserOperations()
-        self.follower_list = []
+    def save(self, *args, **kwargs):
+        if self.operations is None:
+            self.operations = UserOperations()
+
+        return super(User, self).save(*args, **kwargs)
 
     def __str__(self):
         return "@{}".format(self.name)
