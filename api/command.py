@@ -12,6 +12,7 @@ from api.services.user_followers import user_followers
 from api.services.user_lookup import lookup_user
 from api.services.user_mentions import user_mentions
 from api.services.user_tweets import get_user_tweets
+from api.services.user_list import get_user_list
 
 def run_command(commands, arguments):
     if arguments[1] not in commands:
@@ -28,6 +29,11 @@ def get_timeline(handle):
     print('Getting tweets from @' + handle)
     tweets = get_user_tweets(handle)
     print('Imported ' + str(len(tweets)) + ' tweets')
+
+def get_list_memberships(handle):
+    print('Getting list from @' + handle)
+    list_memberships = get_user_list(handle)
+    print('Imported ' + str(len(list_memberships)) + ' memberships from list')
 
 def tag_all():
     tweets = Tweets.untagged()
@@ -128,6 +134,7 @@ def account_top_tweets(handle):
 
 commands = {
     'timeline': get_timeline,
+    'membership_list': get_list_memberships,
     'tag_all': tag_all,
     'tag_tweets_of': tag_tweets_of,
     'tag': tag,
