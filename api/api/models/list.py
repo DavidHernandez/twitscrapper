@@ -12,7 +12,7 @@ class List(db.Document):
     @staticmethod
     def from_json(json):
         new_list = List(
-            id=json['id'],
+            author_id=json['id'],
             name=json['name'],
             owner_list= json['owner_list'],
             raw=json
