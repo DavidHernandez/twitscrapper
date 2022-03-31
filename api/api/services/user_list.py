@@ -13,12 +13,12 @@ def get_user_list(handle):
             user = lookup_user(handle)
         user_id = user['id']
 
-    listMemberships = twitter.list_memberships(user_id)
+    list_memberships = twitter.list_memberships(user_id)
     result = []
 
     
-    for userMembership in listMemberships['data']:
-        userMembership.update({'owner_list': str(user)}) 
-        user = List.from_json(userMembership)
+    for user_membership in list_memberships['data']:
+        user_membership.update({'owner_list': str(user)}) 
+        user = List.from_json(user_membership)
         result.append(user)
     return result
