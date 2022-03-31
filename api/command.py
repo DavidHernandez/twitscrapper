@@ -32,8 +32,8 @@ def get_timeline(handle):
 
 def get_list_memberships(handle):
     print('Getting list from @' + handle)
-    listMemberships = get_user_list(handle)
-    print('Imported ' + str(len(listMemberships)) + ' memberships from list')
+    list_memberships = get_user_list(handle)
+    print('Imported ' + str(len(list_memberships)) + ' memberships from list')
 
 def tag_all():
     tweets = Tweets.untagged()
