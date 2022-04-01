@@ -39,10 +39,10 @@ limits = {
 
 def run_command(command_name, arguments):
     command = commands[command_name]
-    # if len(arguments) > 1:
-        # command(arguments[0], arguments[1])
-    # else:
-        # command(arguments[0])
+    if len(arguments) > 1:
+        command(arguments[0], arguments[1])
+    else:
+        command(arguments[0])
 
 
 def execute_operations():
