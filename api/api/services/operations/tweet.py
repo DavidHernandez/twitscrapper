@@ -1,9 +1,7 @@
 from ...repositories.tweets import Tweets
-from ...repositories.users import Users
 from ...wrappers.twitter import twitter
 from ...models.user import User
 from ...models.tweet import Tweet as Model
-from .user import User as UserActions
 
 class Tweet():
 

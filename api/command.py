@@ -1,9 +1,9 @@
 import sys
 
-from api.services.user_list import get_user_list
+from api.services.operations.list import List
 from api.services.operations.tag import Tag
-from api.services.operations.user import User
 from api.services.operations.tweet import Tweet
+from api.services.operations.user import User
 from api.services.projects.audience_project import AudienceProject
 
 
@@ -22,14 +22,9 @@ def run_command(arguments):
     print('Done')
     return
 
-def get_list_memberships(handle):
-    print('Getting list from @' + handle)
-    list_memberships = get_user_list(handle)
-    print('Imported ' + str(len(list_memberships)) + ' memberships from list')
-
 
 commands = {
-    'membership_list': get_list_memberships,
+    'membership_list': List.user_is_member,
     'tag_all': Tag.all,
     'tag_tweets_of': Tag.by_handle,
     'tag': Tag.by_id,

@@ -40,5 +40,8 @@ class Twitter():
     def replies(self, conversation_id):
         return self.v2.search_recent('conversation_id:' + conversation_id)
 
+    def list_memberships(self, user_id):
+        return self.v2.list_memberships(user_id)
+
 
 twitter = Twitter()

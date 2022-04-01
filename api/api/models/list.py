@@ -1,20 +1,27 @@
 from ..config import db
 
 class List(db.Document):
-    author_id = db.IntField(db_field='id', primary_key=True)
+    id = db.StringField(db_field='_id', primary_key=True)
+    owner_id = db.StringField()
     name = db.StringField()
-    owner_list = db.StringField()
+    description = db.StringField()
+    member_list = db.ListField(db.StringField(), default=list)
+    member_count = db.IntField()
+    follower_count = db.IntField()
     raw = db.DynamicField()
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    def add_member(self, user_id):
+        self.member_list.append(user_id)
 
     @staticmethod
     def from_json(json):
         new_list = List(
-            author_id=json['id'],
+            id=str(json['id']),
+            owner_id=str(json['owner_id']),
             name=json['name'],
-            owner_list= json['owner_list'],
+            description=json['description'],
+            member_count=json['member_count'],
+            follower_count=json['follower_count'],
             raw=json
         )
 
