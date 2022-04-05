@@ -108,11 +108,6 @@ class TweetOperations(db.EmbeddedDocument):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.tags = False
-        self.retweets = False
-        self.likes = False
-        self.quotes = False
-        self.replies = False
 
     def has(self, operation):
         return getattr(self, operation)
@@ -154,6 +149,15 @@ class Tweet(db.Document):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
+        if self.operations is None:
+            self.operations = TweetOperations()
+
+    def save(self, *args, **kwargs):
+        if self.operations is None:
+            self.operations = TweetOperations()
+
+        return super(Tweet, self).save(*args, **kwargs)
 
     def __str__(self):
         return "{}: {}".format(self.id, self.text)
