@@ -48,7 +48,7 @@ class Tweet():
     def all_retweets():
         tweets = Tweets.without_extracted_retweets()
         for tweet in tweets:
-            Tweets.retweets(tweet.id)
+            Tweet.retweets(tweet.id)
 
     @staticmethod
     def replies(tweet_id):
@@ -72,4 +72,4 @@ class Tweet():
         tweets = Tweets.without_extracted_replies()
 
         for tweet in tweets:
-            Tweets.replies(tweet.id)
+            Tweet.replies(tweet.id)

@@ -35,7 +35,8 @@ services:
     environment:
       ME_CONFIG_MONGODB_ADMINUSERNAME: twitscrapper
       ME_CONFIG_MONGODB_ADMINPASSWORD: twitscrapper
-      ME_CONFIG_MONGODB_SERVER: localhost
+      #ME_CONFIG_MONGODB_SERVER: localhost
+      ME_CONFIG_MONGODB_SERVER: mongo
 
 volumes:
   mongo-data:

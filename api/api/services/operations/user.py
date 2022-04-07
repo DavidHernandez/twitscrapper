@@ -70,4 +70,4 @@ class User():
 
         for page in tweets:
             for tweet_data in page['data']:
-                tweet = Tweet.from_json(tweet_data)
+                Tweet.from_json(tweet_data)

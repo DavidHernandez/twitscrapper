@@ -213,26 +213,26 @@ class AudienceProject(BaseProject):
                 'child_tasks': [{
                     'name': 'follower_users_tweets',
                     'command': 'extract_tweets',
-                    'child_tasks': [{
-                        'name': 'followers_followers',
-                        'command': 'extract_followers',
-                        'child_tasks': [{
-                            'name': 'followers_followers_tweets',
-                            'command': 'extract_tweets',
-                            # 'child_tasks': [{
-                                # 'name': 'tag_follower_tweets',
-                                # 'command': 'tag_tweets',
-                            # }]
-                        # },
-                        # {
-                            # 'name': 'tag_followers_followers',
-                            # 'command': 'tag_users',
-                        }],
-                    # },
-                    # {
+                    # 'child_tasks': [{
                         # 'name': 'tag_follower_tweets',
                         # 'command': 'tag_tweets',
-                    }],
+                    # }]
+                },
+                {
+                    'name': 'followers_followers',
+                    'command': 'extract_followers',
+                    'child_tasks': [{
+                        'name': 'followers_followers_tweets',
+                        'command': 'extract_tweets',
+                        # 'child_tasks': [{
+                            # 'name': 'tag_followers_followers_tweets',
+                            # 'command': 'tag_tweets',
+                        # }],
+                    # },
+                    # {
+                        # 'name': 'tag_followers_followers',
+                        # 'command': 'tag_users',
+                    }]
                 # },
                 # {
                     # 'name': 'tag_follower_users',
