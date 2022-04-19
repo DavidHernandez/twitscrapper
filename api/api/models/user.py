@@ -37,6 +37,8 @@ class User(db.Document):
     profession = db.StringField()
 
     follower_list = db.ListField(db.IntField(), default=list)
+    mention_list = db.ListField(db.IntField(), default=list)
+    membership_list = db.ListField(db.IntField(), default=list)
 
     operations = db.EmbeddedDocumentField(UserOperations)
 
@@ -52,6 +54,14 @@ class User(db.Document):
     def add_follower(self, user_id):
         self.mark('followers')
         self.follower_list.append(user_id)
+
+    def add_mentions(self, tweet_id):
+        self.mark('mentions')
+        self.mention_list.append(tweet_id)
+
+    def add_membership(self, list_id):
+        self.mark('lists')
+        self.membership_listt.append(list_id)
 
     def add(self, field, value):
         setattr(self, field, value)

@@ -18,6 +18,7 @@ class Subtask(Task):
     created_at = db.DateTimeField(default=datetime.now())
     updated_at = db.DateTimeField(default=datetime.now())
     operations = db.ListField(db.StringField(), default=list)
+    completed_operations = db.ListField(db.StringField(), default=list)
 
     values = db.DynamicField()
 

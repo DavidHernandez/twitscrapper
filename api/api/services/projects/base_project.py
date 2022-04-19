@@ -43,6 +43,7 @@ class BaseProject():
         if task.is_new():
             print(f'  |-Task {task.name} is new, starting')
             self.start(task)
+
         elif task.is_doing():
             print(f'  |-Task {task.name} is in progress, updating')
             self.update_operations(task)
@@ -55,6 +56,7 @@ class BaseProject():
                 else:
                     print(f'      |-Task {task.name} has no dependants, marking as complete')
                     task.complete()
+
         elif task.is_on_dependants():
             print(f'  |-Task {task.name} is on dependants, updating childrens')
             self.update_operations(task)
@@ -69,10 +71,16 @@ class BaseProject():
     def update_operations(self, task):
         operations = task.operations
         unfinished_operations = Operations.get_unfinished(operations)
+        unfinished_operation_ids = list(map(lambda o: o.id, unfinished_operations))
         updated_operations = []
-        for operation in unfinished_operations:
-            updated_operations.append(operation.id)
+        completed_operations = []
+        for operation in operations:
+            if operation in unfinished_operation_ids:
+                updated_operations.append(operation)
+            else:
+                completed_operations.append(operation)
         task.operations = updated_operations
+        task.completed_operations += completed_operations
 
     def start_tasks(self, task):
         new_tasks = task.get_new_tasks()

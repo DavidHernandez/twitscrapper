@@ -34,10 +34,17 @@ class User():
             return []
 
         users = twitter.followers(user_id)
-        user.mark('followers')
+        limit = 30
+        counter = 0
+
         for data in users:
+            counter += 1
             for user_data in data['data']:
-                Model.from_json(user_data)
+                follower = Model.from_json(user_data)
+                user.add_follower(follower.id)
+            if counter == limit:
+                break
+        user.save()
 
     @staticmethod
     def mentions(handle):
@@ -54,6 +61,8 @@ class User():
         for page in mentions:
             for mention_data in page['data']:
                 tweet = Tweet.from_json(mention_data)
+                user.add_mentions(tweet.id)
+        user.save()
 
     @staticmethod
     def tweets(handle):

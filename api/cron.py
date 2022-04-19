@@ -29,12 +29,12 @@ limits = {
     'tag_tweets': None,
     'extract_likes': 1,
     'extract_retweets': 1,
-    'extract_mentions': None,
-    'extract_replies': None,
+    'extract_mentions': 450,
+    'extract_replies': 450,
     'extract_followers': 1,
     'tag_users': None,
-    'extract_lists': None,
-    'extract_list_members': None,
+    'extract_lists': 75,
+    'extract_list_members': 900,
 }
 
 def run_command(command_name, arguments):
