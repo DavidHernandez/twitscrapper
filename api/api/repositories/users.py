@@ -17,5 +17,5 @@ class Users:
     @staticmethod
     def top_followers(handle, limit=100):
         user = Users.get(handle)
-        followers = user['follower_list']
+        followers = user.follower_list
         return User.objects(id__in=followers).order_by('-followers').limit(limit)

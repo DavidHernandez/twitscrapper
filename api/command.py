@@ -1,5 +1,6 @@
 import sys
 
+from api.repositories.users import Users
 from api.services.operations.list import List
 from api.services.operations.tag import Tag
 from api.services.operations.tweet import Tweet
@@ -23,6 +24,10 @@ def run_command(arguments):
     return
 
 
+def top_followers(handle):
+    print(Users.top_followers(handle))
+
+
 commands = {
     'membership_list': List.user_is_member,
     'tag_all': Tag.all,
@@ -39,6 +44,7 @@ commands = {
     'tweet_replies': Tweet.replies,
     'all_replies': Tweet.all_replies,
     'create_project': AudienceProject.create,
+    'top_followers': top_followers,
 }
 
 args = sys.argv

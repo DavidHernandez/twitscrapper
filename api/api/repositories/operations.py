@@ -11,7 +11,7 @@ class Operations():
         db_query = Operation.objects(command=command, execution_date__exists=False)
 
         if limit:
-            db_query.limit(limit)
+            return db_query[:limit]
 
         return db_query
 

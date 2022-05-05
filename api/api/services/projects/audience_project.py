@@ -105,7 +105,7 @@ class AudienceProject(BaseProject):
         handles = []
         for user in top_followers:
             top_follower_followers = Users.top_followers(user.handle, 10)
-            for user_follower in top_followers:
+            for user_follower in top_follower_followers:
                 handles.append(str(user_follower.handle))
         return handles
 
@@ -167,10 +167,10 @@ class AudienceProject(BaseProject):
                 'name': 'main_account_tweets',
                 'command': 'extract_tweets',
                 'child_tasks': [{
-                    # 'name': 'main_account_tagged_tweets',
-                    # 'command': 'tag_tweets',
-                # },
-                # {
+                    'name': 'main_account_tagged_tweets',
+                    'command': 'tag_tweets',
+                },
+                {
                     'name': 'main_account_tweets_likes',
                     'command': 'extract_likes',
                 },
@@ -186,10 +186,10 @@ class AudienceProject(BaseProject):
             {
                 'name': 'main_account_mentions',
                 'command': 'extract_mentions',
-                # 'child_tasks': [{
-                    # 'name': 'tag_mention_users',
-                    # 'command': 'tag_users',
-                # }]
+                'child_tasks': [{
+                    'name': 'tag_mention_users',
+                    'command': 'tag_users',
+                }]
             },
             # {
                 # 'name': 'main_account_lists',

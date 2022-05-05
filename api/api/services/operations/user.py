@@ -34,7 +34,7 @@ class User():
             return []
 
         users = twitter.followers(user_id)
-        limit = 30
+        limit = 14 
         counter = 0
 
         for data in users:

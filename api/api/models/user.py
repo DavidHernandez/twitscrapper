@@ -80,7 +80,7 @@ class User(db.Document):
         metrics = json['public_metrics']
         user = User(
             id=json['id'],
-            handle=json['username'],
+            handle=json['username'].lower(),
             name=json['name'],
             followers=metrics['followers_count'],
             following=metrics['following_count'],

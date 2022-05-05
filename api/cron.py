@@ -49,17 +49,22 @@ def execute_operations():
     print('Executing operations')
     executed_operations = []
     for command_name in commands:
-        limit = commands[command_name]
+        limit = limits[command_name]
 
+        counter = 0
         operations = Operations.by_command_type(command_name, limit)
+        if len(operations) > 0:
+            print(f'|- Executing operations of command {command_name}')
         for operation in operations:
+            counter += 1
             parameters = operation.parameters
             run_command(command_name, parameters)
             operation.complete()
             executed_operations.append(operation.id)
+        if len(operations) > 0:
+            print(f'  |- Executed {counter} operations of a limit of {limit}')
 
     return executed_operations
-    print('Operations done')
 
 def review_projects(operations):
     projects = Projects.active()
