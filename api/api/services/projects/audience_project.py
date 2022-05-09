@@ -30,7 +30,7 @@ class AudienceProject(BaseProject):
         return AudienceProject(project)
 
     def get_handle(self):
-        return self.project.data['account']
+        return self.project.data['account'].lower()
 
     def get_kb(self):
         return self.project.data['knowledge_base']
@@ -186,10 +186,10 @@ class AudienceProject(BaseProject):
             {
                 'name': 'main_account_mentions',
                 'command': 'extract_mentions',
-                'child_tasks': [{
-                    'name': 'tag_mention_users',
-                    'command': 'tag_users',
-                }]
+                # 'child_tasks': [{
+                    # 'name': 'tag_mention_users',
+                    # 'command': 'tag_users',
+                # }]
             },
             # {
                 # 'name': 'main_account_lists',
