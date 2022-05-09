@@ -167,10 +167,10 @@ class AudienceProject(BaseProject):
                 'name': 'main_account_tweets',
                 'command': 'extract_tweets',
                 'child_tasks': [{
-                    'name': 'main_account_tagged_tweets',
-                    'command': 'tag_tweets',
-                },
-                {
+                    # 'name': 'main_account_tagged_tweets',
+                    # 'command': 'tag_tweets',
+                # },
+                # {
                     'name': 'main_account_tweets_likes',
                     'command': 'extract_likes',
                 },
