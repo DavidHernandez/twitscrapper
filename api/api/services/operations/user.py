@@ -39,6 +39,8 @@ class User():
 
         for data in users:
             counter += 1
+            if 'errors' in data:
+                continue
             for user_data in data['data']:
                 follower = Model.from_json(user_data)
                 user.add_follower(follower.id)
