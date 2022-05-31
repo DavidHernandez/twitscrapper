@@ -99,12 +99,11 @@ class AudienceProject(BaseProject):
         return self.follower_users_tweets_parameters()
 
     def followers_followers_tweets_parameters(self):
-        handle = self.get_handle()
-        top_followers = Users.top_followers(handle)
+        top_followers = self.follower_users_tweets_parameters()
 
         handles = []
         for user in top_followers:
-            top_follower_followers = Users.top_followers(user.handle, 10)
+            top_follower_followers = Users.top_followers(user, 10)
             for user_follower in top_follower_followers:
                 handles.append(str(user_follower.handle))
         return handles

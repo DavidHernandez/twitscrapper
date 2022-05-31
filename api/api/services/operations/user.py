@@ -42,7 +42,13 @@ class User():
             if 'errors' in data:
                 continue
             for user_data in data['data']:
-                follower = Model.from_json(user_data)
+                user_id = user_data['id']
+                follower_user = Users.by_id(user_id)
+
+                if not follower_user:
+                    follower = Model.from_json(user_data)
+                else:
+                    follower = follower_user
                 user.add_follower(follower.id)
             if counter == limit:
                 break
