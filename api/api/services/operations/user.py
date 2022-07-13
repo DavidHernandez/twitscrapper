@@ -41,6 +41,7 @@ class User():
             counter += 1
             if 'errors' in data:
                 continue
+
             for user_data in data['data']:
                 user_id = user_data['id']
                 follower_user = Users.by_id(user_id)
