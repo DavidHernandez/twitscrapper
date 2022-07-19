@@ -1,5 +1,5 @@
 mongoengine==0.16.2
-natsort==8.1.0
+natsort==7.0.1
 pygsheets==2.0.5
 python-pcre==0.7
 python-slugify==6.1.2 
