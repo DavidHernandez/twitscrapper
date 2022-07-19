@@ -6,6 +6,7 @@ from api.services.operations.tag import Tag
 from api.services.operations.tweet import Tweet
 from api.services.operations.user import User
 from api.services.projects.audience_project import AudienceProject
+from api.services.tag_updater import TagUpdater
 
 
 def run_command(arguments):
@@ -33,6 +34,7 @@ commands = {
     'tag_all': Tag.all,
     'tag_tweets_of': Tag.by_handle,
     'tag': Tag.by_id,
+    'update-kb': TagUpdater.execute,
     'user': User.get,
     'timeline': User.tweets,
     'mentions': User.mentions,

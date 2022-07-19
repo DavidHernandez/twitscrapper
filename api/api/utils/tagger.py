@@ -1,9 +1,13 @@
-from ..config import config
-import requests
+import codecs
+import pickle
+import tipi_tasks
 
-def tag_text(text):
-    r = requests.post(config.BACKEND_URL + '/tagger/',
-        data={'text': text}
-    )
+from ..repositories.tags import Tags
 
-    return r.json()
+class Tagger:
+
+    @staticmethod
+    def tag(text):
+      tags = Tags.get_all()
+      tags = codecs.encode(pickle.dumps(tags), "base64").decode()
+      return tipi_tasks.tagger.extract_tags_from_text(text, tags)
