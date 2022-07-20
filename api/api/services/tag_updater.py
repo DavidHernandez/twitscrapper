@@ -11,7 +11,7 @@ from ..models.topic import Topic
 class TagUpdater:
 
     def __init__(self, verbose=False):
-        self.GOOGLE_DRIVE_CREDENTIALS_FILE = 'credentials.json'
+        self.GOOGLE_DRIVE_CREDENTIALS_FILE = './data/credentials.json'
         self.DATA_REFERENCE_FILE = 'isglobal.json'
         self.verbose = verbose
         self.topics = list()

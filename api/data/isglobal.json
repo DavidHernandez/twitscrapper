@@ -1,0 +1,26 @@
+[
+  {
+    "filename": "isglobal-ods3-ca",
+    "name": "ISGlobal ODS3 Ca",
+    "shortname": "ods3-ca",
+    "description": []
+  },
+  {
+    "filename": "isglobal-ods3-es",
+    "name": "ISGlobal ODS3 Es",
+    "shortname": "ods3-es",
+    "description": []
+  },
+  {
+    "filename": "isglobal-ods3-en",
+    "name": "ISGlobal ODS3 En",
+    "shortname": "ods3-en",
+    "description": []
+  },
+  {
+    "filename": "profesiones",
+    "name": "Profesiones para ISGlobal",
+    "shortname": "profesiones",
+    "description": []
+  }
+]

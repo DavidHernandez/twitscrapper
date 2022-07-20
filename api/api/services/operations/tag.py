@@ -1,4 +1,4 @@
-from ...utils.tagger import tag_text
+from ...utils.tagger import Tagger
 from ...repositories.tweets import Tweets
 from ...repositories.users import Users
 
@@ -12,7 +12,7 @@ class Tag():
     @staticmethod
     def tweet(tweet):
         try:
-            tagger_response = tag_text(tweet.clean_text)
+            tagger_response = Tagger.tag(tweet.clean_text)
         except:
             # Error tagging, skipping
             print("Skipping because of error")
