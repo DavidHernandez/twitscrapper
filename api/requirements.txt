@@ -1,8 +1,4 @@
-mongoengine==0.16.2
 natsort==7.0.1
 pygsheets==2.0.5
-python-pcre==0.7
-python-slugify==6.1.2 
-requests==2.20.1
 git+https://github.com/politicalwatch/tipi-tasks.git
 git+https://github.com/DocNow/twarc.git
