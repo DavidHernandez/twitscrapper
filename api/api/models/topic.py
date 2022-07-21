@@ -41,3 +41,27 @@ class Topic(db.Document):
 
     def __str__(self):
         return self.name
+
+    def add_tag(self, data):
+        tag = Tag(
+                tag=data['tag'],
+                subtopic=data['subtopic'],
+                regex=data['regex'],
+                shuffle=data['shuffle']
+            )
+        self.tags.append(tag)
+        return tag
+
+    @staticmethod
+    def from_json(data):
+        topic = Topic(
+                id=data['_id'],
+                name=data['name'],
+                shortname=data['shortname'],
+                description=data['description'],
+                knowledgebase=data['knowledgebase']
+            )
+        for tag in data['tags']:
+            topic.add_tag(tag)
+        topic.save()
+        return topic

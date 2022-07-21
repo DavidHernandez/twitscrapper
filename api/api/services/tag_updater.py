@@ -49,7 +49,9 @@ class TagUpdater:
         for data_reference_item in self.data_reference:
             if self.verbose:
                 print("[EXTRACT] {}".format(data_reference_item['name']))
-            wks = self.google_credentials.open(data_reference_item['filename']).sheet1
+            filename = data_reference_item['filename']
+            filesheet = self.google_credentials.open(filename)
+            wks = filesheet.sheet1
             topic = data_reference_item.copy()
             del topic['filename']
             topic['_id'] = slugify(topic['shortname'].lower())
@@ -65,14 +67,14 @@ class TagUpdater:
                         'shuffle': bool(int(row[0]))
                         }
                 self.__validate(tag)
-                topic['knowledgebase'] = self.get_knowledge_base()
+                topic['knowledgebase'] = filename
                 topic['public'] = True
                 topic['tags'].append(tag)
             self.topics.append(topic)
 
     def create_topics(self):
         for topic in self.topics:
-            Topic.create(topic)
+            Topic.from_json(topic)
 
     def run(self):
         self.load_data_reference()

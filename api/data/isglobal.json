@@ -1,8 +1,8 @@
 [
   {
-    "filename": "isglobal-ods3-ca",
-    "name": "ISGlobal ODS3 Ca",
-    "shortname": "ods3-ca",
+    "filename": "isglobal-ods3-en",
+    "name": "ISGlobal ODS3 En",
+    "shortname": "ods3-en",
     "description": []
   },
   {
@@ -12,9 +12,9 @@
     "description": []
   },
   {
-    "filename": "isglobal-ods3-en",
-    "name": "ISGlobal ODS3 En",
-    "shortname": "ods3-en",
+    "filename": "isglobal-ods3-ca",
+    "name": "ISGlobal ODS3 Ca",
+    "shortname": "ods3-ca",
     "description": []
   },
   {
