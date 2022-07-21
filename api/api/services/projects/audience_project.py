@@ -166,10 +166,10 @@ class AudienceProject(BaseProject):
                 'name': 'main_account_tweets',
                 'command': 'extract_tweets',
                 'child_tasks': [{
-                    # 'name': 'main_account_tagged_tweets',
-                    # 'command': 'tag_tweets',
-                # },
-                # {
+                    'name': 'main_account_tagged_tweets',
+                    'command': 'tag_tweets',
+                },
+                {
                     'name': 'main_account_tweets_likes',
                     'command': 'extract_likes',
                 },
@@ -185,10 +185,10 @@ class AudienceProject(BaseProject):
             {
                 'name': 'main_account_mentions',
                 'command': 'extract_mentions',
-                # 'child_tasks': [{
-                    # 'name': 'tag_mention_users',
-                    # 'command': 'tag_users',
-                # }]
+                'child_tasks': [{
+                    'name': 'tag_mention_users',
+                    'command': 'tag_users',
+                }]
             },
             # {
                 # 'name': 'main_account_lists',
@@ -212,10 +212,10 @@ class AudienceProject(BaseProject):
                 'child_tasks': [{
                     'name': 'follower_users_tweets',
                     'command': 'extract_tweets',
-                    # 'child_tasks': [{
-                        # 'name': 'tag_follower_tweets',
-                        # 'command': 'tag_tweets',
-                    # }]
+                    'child_tasks': [{
+                        'name': 'tag_follower_tweets',
+                        'command': 'tag_tweets',
+                    }]
                 },
                 {
                     'name': 'followers_followers',
@@ -223,19 +223,19 @@ class AudienceProject(BaseProject):
                     'child_tasks': [{
                         'name': 'followers_followers_tweets',
                         'command': 'extract_tweets',
-                        # 'child_tasks': [{
-                            # 'name': 'tag_followers_followers_tweets',
-                            # 'command': 'tag_tweets',
-                        # }],
-                    # },
-                    # {
-                        # 'name': 'tag_followers_followers',
-                        # 'command': 'tag_users',
+                        'child_tasks': [{
+                           'name': 'tag_followers_followers_tweets',
+                           'command': 'tag_tweets',
+                        }],
+                    },
+                    {
+                        'name': 'tag_followers_followers',
+                        'command': 'tag_users',
                     }]
-                # },
-                # {
-                    # 'name': 'tag_follower_users',
-                    # 'command': 'tag_users',
+                },
+                {
+                    'name': 'tag_follower_users',
+                    'command': 'tag_users',
                 }],
             }],
         }]

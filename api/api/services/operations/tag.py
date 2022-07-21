@@ -11,17 +11,34 @@ class Tag():
 
     @staticmethod
     def tweet(tweet):
+        kb = 'isglobal-ods3-' + tweet.language
         try:
-            tagger_response = Tagger.tag(tweet.clean_text)
-        except:
+            tagger_response = Tagger.tag(kb, tweet.text)
+        except Exception as e:
             # Error tagging, skipping
             print("Skipping because of error")
+            print(e)
             return
         tags = tagger_response['result']['tags']
         tweet.untag()
         for tag in tags:
             tweet.add_tag(tag['knowledgebase'], True, tag['topic'], tag['subtopic'], tag['tag'], tag['times'])
         tweet.save()
+
+    @staticmethod
+    def profile(user):
+        kb = 'profesiones'
+        try:
+            tagger_response = Tagger.tag(kb, user.description)
+        except:
+            # Error tagging, skipping
+            print("Skipping because of error")
+            return
+        tags = tagger_response['result']['tags']
+        user.untag()
+        for tag in tags:
+            user.add_tag(tag['knowledgebase'], True, tag['topic'], tag['subtopic'], tag['tag'], tag['times'])
+        user.save()
 
     @staticmethod
     def tweets(tweets):
@@ -32,6 +49,12 @@ class Tag():
     def all():
         tweets = Tweets.untagged()
         Tag.tweets(tweets)
+
+    @staticmethod
+    def profiles():
+        users = Users.untagged()
+        for user in users:
+            Tag.profile(user)
 
     @staticmethod
     def by_handle(handle):

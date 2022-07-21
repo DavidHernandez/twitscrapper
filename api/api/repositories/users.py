@@ -15,6 +15,14 @@ class Users:
         return User.objects()
 
     @staticmethod
+    def by_query(query):
+        return User.objects(__raw__=query)
+
+    @staticmethod
+    def untagged():
+        return Users.by_query({'operations.profession': False})
+
+    @staticmethod
     def top_followers(handle, limit=100):
         user = Users.get(handle)
         followers = user.follower_list

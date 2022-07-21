@@ -32,6 +32,7 @@ def top_followers(handle):
 commands = {
     'membership_list': List.user_is_member,
     'tag_all': Tag.all,
+    'tag_profiles': Tag.profiles,
     'tag_tweets_of': Tag.by_handle,
     'tag': Tag.by_id,
     'update-kb': TagUpdater.execute,
