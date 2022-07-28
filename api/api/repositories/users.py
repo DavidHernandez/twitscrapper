@@ -8,7 +8,7 @@ class Users:
 
     @staticmethod
     def by_id(id):
-        return User.objects(id=id).first()
+        return User.objects(id=int(id)).first()
 
     @staticmethod
     def all():
@@ -20,7 +20,7 @@ class Users:
 
     @staticmethod
     def untagged():
-        return Users.by_query({'operations.profession': False})
+        return Users.by_query({'operations.profession': False}).batch_size(100)
 
     @staticmethod
     def top_followers(handle, limit=100):

@@ -27,12 +27,14 @@ class Tag():
 
     @staticmethod
     def profile(user):
+        print(f"Tagging {user}")
         kb = 'profesiones'
         try:
             tagger_response = Tagger.tag(kb, user.description)
-        except:
+        except Exception as e:
             # Error tagging, skipping
             print("Skipping because of error")
+            print(e)
             return
         tags = tagger_response['result']['tags']
         user.untag()

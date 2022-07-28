@@ -8,7 +8,7 @@ class Tweets():
 
     @staticmethod
     def untagged():
-        return Tweets.by_query({'operations.tags': False})
+        return Tweets.by_query({'operations.tags': False}).batch_size(100)
 
     @staticmethod
     def get(id):
