@@ -92,7 +92,6 @@ class User(db.Document):
     created_at = db.DateTimeField()
     url = db.StringField()
     verified = db.BooleanField()
-    profession = db.StringField()
 
     follower_list = db.ListField(db.IntField(), default=list)
     mention_list = db.ListField(db.IntField(), default=list)
@@ -153,6 +152,25 @@ class User(db.Document):
 
     def unmark(self, operation):
         return self.operations.unmark(operation)
+
+    @property
+    def profession(self):
+        if not self.has_tags():
+            return ''
+        profession = None
+        professions = self.tagged[0]
+
+        if not len(professions.tags):
+            return ''
+
+        for tag in professions.tags:
+            if not profession:
+                profession = tag
+            if profession.times < tag.times:
+                profession = tag
+
+        return profession.subtopic
+
 
     @staticmethod
     def from_json(json):

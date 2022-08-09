@@ -1,11 +1,11 @@
 import sys
 
-from api.repositories.users import Users
 from api.services.operations.list import List
 from api.services.operations.tag import Tag
 from api.services.operations.tweet import Tweet
 from api.services.operations.user import User
 from api.services.projects.audience_project import AudienceProject
+from api.services.stats.top_followers import TopFollowers
 from api.services.tag_updater import TagUpdater
 
 
@@ -23,10 +23,6 @@ def run_command(arguments):
 
     print('Done')
     return
-
-
-def top_followers(handle):
-    print(Users.top_followers(handle))
 
 
 commands = {
@@ -47,7 +43,7 @@ commands = {
     'tweet_replies': Tweet.replies,
     'all_replies': Tweet.all_replies,
     'create_project': AudienceProject.create,
-    'top_followers': top_followers,
+    'top_followers': TopFollowers.calculate,
 }
 
 args = sys.argv
