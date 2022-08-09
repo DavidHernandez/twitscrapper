@@ -6,6 +6,8 @@ from api.services.operations.tweet import Tweet
 from api.services.operations.user import User
 from api.services.projects.audience_project import AudienceProject
 from api.services.stats.top_followers import TopFollowers
+from api.services.stats.top_hashtags import TopHashtags
+from api.services.stats.top_mentions import TopMentions
 from api.services.tag_updater import TagUpdater
 
 
@@ -44,6 +46,8 @@ commands = {
     'all_replies': Tweet.all_replies,
     'create_project': AudienceProject.create,
     'top_followers': TopFollowers.calculate,
+    'top_mentions': TopMentions.calculate,
+    'top_hashtags': TopHashtags.calculate,
 }
 
 args = sys.argv

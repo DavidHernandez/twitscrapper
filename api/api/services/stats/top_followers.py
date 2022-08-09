@@ -4,6 +4,7 @@ from api.models.stat import TopFollowersStat
 
 
 class TopFollowers:
+
     @staticmethod
     def calculate(handle, skip=False):
         if not skip:
