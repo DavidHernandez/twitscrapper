@@ -89,3 +89,9 @@ class User():
         for page in tweets:
             for tweet_data in page['data']:
                 Tweet.from_json(tweet_data)
+
+    @staticmethod
+    def add_extra(handle, key, value):
+        user = User.get(handle)
+        user.set_extra(key, value)
+        user.save()

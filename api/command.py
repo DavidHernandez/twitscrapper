@@ -16,7 +16,9 @@ def run_command(arguments):
         print('invalid command')
         return
 
-    if len(arguments) > 3:
+    if len(arguments) > 4:
+        commands[arguments[1]](arguments[2], arguments[3], arguments[4])
+    elif len(arguments) > 3:
         commands[arguments[1]](arguments[2], arguments[3])
     elif len(arguments) > 2:
         commands[arguments[1]](arguments[2])
@@ -48,6 +50,7 @@ commands = {
     'top_followers': TopFollowers.calculate,
     'top_mentions': TopMentions.calculate,
     'top_hashtags': TopHashtags.calculate,
+    'add_extra': User.add_extra,
 }
 
 args = sys.argv

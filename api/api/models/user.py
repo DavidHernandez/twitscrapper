@@ -101,6 +101,8 @@ class User(db.Document):
 
     operations = db.EmbeddedDocumentField(UserOperations)
 
+    extras = db.DictField(default=dict)
+
     def save(self, *args, **kwargs):
         if self.operations is None:
             self.operations = UserOperations()
@@ -152,6 +154,9 @@ class User(db.Document):
 
     def unmark(self, operation):
         return self.operations.unmark(operation)
+
+    def set_extra(self, key, value):
+        self.extras[key] = value
 
     @property
     def profession(self):
