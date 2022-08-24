@@ -51,6 +51,7 @@ commands = {
     'top_mentions': TopMentions.calculate,
     'top_hashtags': TopHashtags.calculate,
     'add_extra': User.add_extra,
+    'user_delete': User.delete,
 }
 
 args = sys.argv

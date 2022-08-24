@@ -92,6 +92,16 @@ class User():
 
     @staticmethod
     def add_extra(handle, key, value):
-        user = User.get(handle)
+        user = Users.get(handle)
         user.set_extra(key, value)
         user.save()
+
+    @staticmethod
+    def delete(handle):
+        user = Users.get(handle)
+        tweets = Tweets.by_author(user.id)
+
+        for tweet in tweets:
+            tweet.delete()
+
+        user.delete()
