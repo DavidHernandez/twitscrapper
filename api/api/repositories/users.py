@@ -1,9 +1,15 @@
 from ..models.user import User 
 
 class Users:
+    @staticmethod
+    def exists(handle):
+        if handle.isdigit():
+            return Users.by_id(handle)
+        return Users.get(handle)
 
     @staticmethod
     def get(handle):
+        handle = handle.lower()
         return User.objects(handle=handle).first()
 
     @staticmethod

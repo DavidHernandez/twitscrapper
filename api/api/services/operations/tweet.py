@@ -1,4 +1,5 @@
 from ...repositories.tweets import Tweets
+from ...repositories.users import Users
 from ...wrappers.twitter import twitter
 from ...models.user import User
 from ...models.tweet import Tweet as Model
@@ -16,8 +17,10 @@ class Tweet():
 
         for data in users:
             for user_data in data['data']:
-                user = User.from_json(user_data)
-                tweet.add_like(user.id)
+                user_id = user_data['id']
+                if not Users.exists(user_id):
+                    user = User.from_json(user_data)
+                tweet.add_like(user_id)
 
         tweet.save()
 
@@ -39,8 +42,10 @@ class Tweet():
 
         for data in users:
             for user_data in data['data']:
-                user = User.from_json(user_data)
-                tweet.add_retweeter(user.id)
+                user_id = user_data['id']
+                if not Users.exists(user_id):
+                    user = User.from_json(user_data)
+                tweet.add_retweeter(user_id)
 
         tweet.save()
 
@@ -62,8 +67,10 @@ class Tweet():
 
         for data in tweets:
             for tweet_data in data['data']:
-                new_tweet = Model.from_json(tweet_data)
-                tweet.add_reply(new_tweet.id)
+                tweet_id = tweet_data['id']
+                if not Tweets.get(tweet_id):
+                    new_tweet = Model.from_json(tweet_data)
+                tweet.add_reply(tweet_id)
 
         tweet.save()
 

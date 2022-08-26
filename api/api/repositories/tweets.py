@@ -23,16 +23,20 @@ class Tweets():
         return Tweets.by_author(author_id).order_by('-created').limit(1).first()
 
     @staticmethod
+    def first(author_id):
+        return Tweets.by_author(author_id).order_by('created').limit(1).first()
+
+    @staticmethod
     def by_query(query):
         return Tweet.objects(__raw__=query)
 
     @staticmethod
     def without_extracted_likes():
-        return Tweets.by_query({'operations.likes': False, 'liked': {'$gt': 0}})
+        return Tweets.by_query({'operations.likes': False, 'liked': {'$gt': 0}, 'text': {'$regex': '^(?!RT @).*'}})
 
     @staticmethod
     def without_extracted_retweets():
-        return Tweets.by_query({'operations.retweets': False, 'retweeted': {'$gt': 0}})
+        return Tweets.by_query({'operations.retweets': False, 'retweeted': {'$gt': 0}, 'text': {'$regex': '^(?!RT @).*'}})
 
     @staticmethod
     def without_extracted_replies():

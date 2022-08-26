@@ -2,3 +2,4 @@ natsort==7.0.1
 pygsheets==2.0.5
 git+https://github.com/politicalwatch/tipi-tasks.git
 git+https://github.com/DocNow/twarc.git
+twarc-network==0.1.1
