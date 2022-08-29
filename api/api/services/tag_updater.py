@@ -10,9 +10,9 @@ from ..models.topic import Topic
 
 class TagUpdater:
 
-    def __init__(self, verbose=False):
+    def __init__(self, filename, verbose=False):
         self.GOOGLE_DRIVE_CREDENTIALS_FILE = './data/credentials.json'
-        self.DATA_REFERENCE_FILE = 'isglobal.json'
+        self.filename = filename
         self.verbose = verbose
         self.topics = list()
         self.data_reference = list()
@@ -34,11 +34,11 @@ class TagUpdater:
             self.__regex_validation(tag['tag'], tag['regex'])
 
     def load_data_reference(self):
-        with open('./data/' + self.DATA_REFERENCE_FILE, 'r') as data_reference_file:
+        with open('./data/' + self.filename, 'r') as data_reference_file:
             self.data_reference = json.load(data_reference_file)
 
     def get_knowledge_base(self):
-        return self.DATA_REFERENCE_FILE.split('.')[0]
+        return self.filename.split('.')[0]
 
     def load_google_credentials(self):
         self.google_credentials = pygsheets.authorize(
@@ -84,8 +84,17 @@ class TagUpdater:
 
     @staticmethod
     def execute():
+      filename = 'isglobal.json'
       print('Initializing')
-      extractor = TagUpdater(verbose=True)
+      extractor = TagUpdater(filename, verbose=True)
+      print('Executing')
+      extractor.run()
+      print('Done')
+
+    @staticmethod
+    def by_file(filename):
+      print('Initializing')
+      extractor = TagUpdater(filename, verbose=True)
       print('Executing')
       extractor.run()
       print('Done')

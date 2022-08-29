@@ -36,6 +36,7 @@ commands = {
     'tag_tweets_of': Tag.by_handle,
     'tag': Tag.by_id,
     'update-kb': TagUpdater.execute,
+    'add-kb': TagUpdater.by_file,
     'user': User.get,
     'timeline': User.tweets,
     'mentions': User.mentions,
