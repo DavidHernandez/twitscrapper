@@ -6,7 +6,7 @@ class Tag():
 
     @staticmethod
     def by_id(tweet_id):
-        tweet = Tweets.get(id)
+        tweet = Tweets.get(tweet_id)
         Tag.tweet(tweet)
 
     @staticmethod
