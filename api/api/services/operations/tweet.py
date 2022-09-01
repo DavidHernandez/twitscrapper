@@ -5,6 +5,13 @@ from ...models.user import User
 from ...models.tweet import Tweet as Model
 
 class Tweet():
+    @staticmethod
+    def tweet(tweet_id):
+        tweets = twitter.tweet(tweet_id)
+        for data in tweets:
+            for tweet_data in data['data']:
+                if not Tweets.get(tweet_id):
+                    Model.from_json(tweet_data)
 
     @staticmethod
     def likes(tweet_id):

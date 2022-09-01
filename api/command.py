@@ -30,6 +30,7 @@ def run_command(arguments):
 
 
 commands = {
+    'tweet': Tweet.tweet,
     'membership_list': List.user_is_member,
     'tag_all': Tag.all,
     'tag_profiles': Tag.profiles,

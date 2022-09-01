@@ -19,6 +19,9 @@ class Twitter():
             config.TWITTER_TOKEN_SECRET
         )
 
+    def tweet(self, tweet_id):
+        return self.v2.tweet_lookup([tweet_id])
+
     def timeline(self, user_id, since_id=None):
         return self.v2.timeline(user_id, since_id=since_id)
 
