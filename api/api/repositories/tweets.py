@@ -11,6 +11,10 @@ class Tweets():
         return Tweets.by_query({'operations.tags': False}).batch_size(100)
 
     @staticmethod
+    def tagged():
+        return Tweets.by_query({'operations.tags': True}).batch_size(100)
+
+    @staticmethod
     def get(id):
         return Tweet.objects(id=id).first()
 

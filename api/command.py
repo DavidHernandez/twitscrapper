@@ -8,6 +8,8 @@ from api.services.projects.audience_project import AudienceProject
 from api.services.stats.top_followers import TopFollowers
 from api.services.stats.top_hashtags import TopHashtags
 from api.services.stats.top_mentions import TopMentions
+from api.services.stats.top_tags import TopTags
+from api.services.stats.top_topics import TopTopics
 from api.services.tag_updater import TagUpdater
 
 
@@ -33,6 +35,7 @@ commands = {
     'tweet': Tweet.tweet,
     'membership_list': List.user_is_member,
     'tag_all': Tag.all,
+    'untag_all': Tag.untag_all,
     'retag_all': Tag.retag_all,
     'tag_profiles': Tag.profiles,
     'tag_tweets_of': Tag.by_handle,
@@ -53,6 +56,8 @@ commands = {
     'top_followers': TopFollowers.calculate,
     'top_mentions': TopMentions.calculate,
     'top_hashtags': TopHashtags.calculate,
+    'top_topics': TopTopics.calculate,
+    'top_tags': TopTags.calculate,
     'add_extra': User.add_extra,
     'user_delete': User.delete,
 }

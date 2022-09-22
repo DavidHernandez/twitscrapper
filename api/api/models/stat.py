@@ -7,6 +7,28 @@ class Stat(db.DynamicDocument):
     meta = {'allow_inheritance': True}
     stat_type = db.StringField(required=True)
 
+class TopTagsStat(Stat):
+    times = db.IntField()
+    tag = db.StringField()
+    language = db.StringField()
+    user_id = db.IntField()
+
+    def save(self, *args, **kwargs):
+        if not self.stat_type:
+            self.stat_type = 'top_tags'
+        return super(TopTagsStat, self).save(*args, **kwargs)
+
+class TopTopicsStat(Stat):
+    times = db.IntField()
+    topic = db.StringField()
+    language = db.StringField()
+    user_id = db.IntField()
+
+    def save(self, *args, **kwargs):
+        if not self.stat_type:
+            self.stat_type = 'top_topics'
+        return super(TopTopicsStat, self).save(*args, **kwargs)
+
 class TopFollowersStat(Stat):
     user_id = db.IntField()
     user_handle = db.StringField()

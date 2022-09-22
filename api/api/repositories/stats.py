@@ -1,4 +1,4 @@
-from ..models.stat import TopFollowersStat, TopHashtagsStat, TopMentionsStat
+from ..models.stat import TopFollowersStat, TopHashtagsStat, TopMentionsStat, TopTagsStat, TopTopicsStat
 
 class TopFollowersStats:
 
@@ -25,3 +25,15 @@ class TopHashtagsStats:
     @staticmethod
     def clear():
         return TopHashtagsStat.objects().delete()
+
+class TopTopicsStats:
+
+    @staticmethod
+    def clear():
+        return TopTopicsStat.objects().delete()
+
+class TopTagsStats:
+
+    @staticmethod
+    def clear():
+        return TopTagsStat.objects().delete()

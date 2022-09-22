@@ -53,6 +53,13 @@ class Tag():
         Tag.tweets(tweets)
 
     @staticmethod
+    def untag_all():
+        tweets = Tweets.tagged()
+        for tweet in tweets:
+            tweet.untag()
+            tweet.save()
+
+    @staticmethod
     def retag_all():
         tweets = Tweets.all()
         Tag.tweets(tweets)
