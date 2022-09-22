@@ -53,6 +53,11 @@ class Tag():
         Tag.tweets(tweets)
 
     @staticmethod
+    def retag_all():
+        tweets = Tweets.all()
+        Tag.tweets(tweets)
+
+    @staticmethod
     def profiles():
         users = Users.untagged()
         for user in users:

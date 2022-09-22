@@ -33,6 +33,7 @@ commands = {
     'tweet': Tweet.tweet,
     'membership_list': List.user_is_member,
     'tag_all': Tag.all,
+    'retag_all': Tag.retag_all,
     'tag_profiles': Tag.profiles,
     'tag_tweets_of': Tag.by_handle,
     'tag': Tag.by_id,
