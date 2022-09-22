@@ -4,7 +4,7 @@ class Tweets():
 
     @staticmethod
     def all():
-        return Tweet.objects()
+        return Tweet.objects().batch_size(100)
 
     @staticmethod
     def untagged():
