@@ -49,6 +49,7 @@ class TagUpdater:
         for data_reference_item in self.data_reference:
             if self.verbose:
                 print("[EXTRACT] {}".format(data_reference_item['name']))
+
             filename = data_reference_item['filename']
             filesheet = self.google_credentials.open(filename)
             wks = filesheet.sheet1
@@ -57,13 +58,14 @@ class TagUpdater:
             topic['_id'] = slugify(topic['shortname'].lower())
             topic['tags'] = []
             data = wks.get_values(grange=pygsheets.GridRange(worksheet=wks, start=None, end=None))
+
             for row in data[1:]:
-                if row[0] == '' and row[1] == '' and row[2] == '' and row[3] == '':
+                if row[0] == '' and row[2] == '' and row[3] == '' and row[4] == '':
                     continue
                 tag = {
-                        'regex': row[3],
-                        'tag': row[2],
-                        'subtopic': row[1],
+                        'regex': row[4],
+                        'tag': row[3],
+                        'subtopic': row[2],
                         'shuffle': bool(int(row[0]))
                         }
                 self.__validate(tag)
