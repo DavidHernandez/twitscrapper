@@ -42,7 +42,7 @@ class TopTopics:
                     topics['all'][topic]['times'] += 1
                     topics[language][topic]['times'] += 1
 
-
+        count = 1
         for language in topics:
             for topic_name in topics[language]:
                 topic = topics[language][topic_name] 
@@ -52,3 +52,5 @@ class TopTopics:
                     user_id=topic['user_id'],
                     language=language
                     ).save()
+                print(count)
+                count += 1

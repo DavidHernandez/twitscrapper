@@ -4,15 +4,15 @@ class Tweets():
 
     @staticmethod
     def all():
-        return Tweet.objects().batch_size(100)
+        return Tweet.objects().batch_size(50)
 
     @staticmethod
     def untagged():
-        return Tweets.by_query({'operations.tags': False}).batch_size(100)
+        return Tweets.by_query({'operations.tags': False}).batch_size(50)
 
     @staticmethod
     def tagged():
-        return Tweets.by_query({'operations.tags': True}).batch_size(100)
+        return Tweets.by_query({'operations.tags': True}).batch_size(50)
 
     @staticmethod
     def get(id):
