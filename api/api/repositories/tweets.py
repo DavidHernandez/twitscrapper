@@ -15,6 +15,10 @@ class Tweets():
         return Tweets.by_query({'operations.tags': True}).batch_size(50)
 
     @staticmethod
+    def with_tags():
+        return Tweets.by_query({'tagged.tags': {'$exists': True}}).batch_size(50)
+
+    @staticmethod
     def get(id):
         return Tweet.objects(id=id).first()
 

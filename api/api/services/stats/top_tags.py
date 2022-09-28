@@ -9,13 +9,10 @@ class TopTags:
     def calculate():
         TopTagsStats.clear()
 
-        tweets = Tweets.all()
+        tweets = Tweets.with_tags()
         tags = {}
         tags['all'] = {}
         for tweet in tweets:
-            if not tweet.has_tags():
-                continue
-
             language = tweet.language
             if language not in tags:
                 tags[language] = {}

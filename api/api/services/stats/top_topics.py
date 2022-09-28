@@ -9,13 +9,10 @@ class TopTopics:
     def calculate():
         TopTopicsStats.clear()
 
-        tweets = Tweets.all()
+        tweets = Tweets.with_tags()
         topics = {}
         topics['all'] = {}
         for tweet in tweets:
-            if not tweet.has_tags():
-                continue
-
             language = tweet.language
             if language not in topics:
                 topics[language] = {}
@@ -42,7 +39,6 @@ class TopTopics:
                     topics['all'][topic]['times'] += 1
                     topics[language][topic]['times'] += 1
 
-        count = 1
         for language in topics:
             for topic_name in topics[language]:
                 topic = topics[language][topic_name] 
@@ -52,5 +48,3 @@ class TopTopics:
                     user_id=topic['user_id'],
                     language=language
                     ).save()
-                print(count)
-                count += 1
