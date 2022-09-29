@@ -12,6 +12,7 @@ class TopTagsStat(Stat):
     tag = db.StringField()
     language = db.StringField()
     user_id = db.IntField()
+    impact_score = db.FloatField()
 
     def save(self, *args, **kwargs):
         if not self.stat_type:
@@ -23,6 +24,7 @@ class TopTopicsStat(Stat):
     topic = db.StringField()
     language = db.StringField()
     user_id = db.IntField()
+    impact_score = db.FloatField()
 
     def save(self, *args, **kwargs):
         if not self.stat_type:

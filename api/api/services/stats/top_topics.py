@@ -10,41 +10,41 @@ class TopTopics:
         TopTopicsStats.clear()
 
         tweets = Tweets.with_tags()
-        topics = {}
-        topics['all'] = {}
-        for tweet in tweets:
-            language = tweet.language
-            if language not in topics:
-                topics[language] = {}
 
+        for tweet in tweets:
             tagged = tweet.tagged
 
             for tagged_kb in tagged:
                 for tag in tagged_kb.tags:
                     topic = tag.subtopic
+                    author = tweet.author_id
+                    language = tweet.language
+                    score = tweet.impact_score
 
-                    if topic not in topics['all']:
-                        topics['all'][topic] = {
-                                    'topic': topic,
-                                    'times': 0,
-                                    'user_id': tweet.author_id
-                                }
+                    all_stat = TopTopicsStats.find(topic, 'all', author)
+                    if not all_stat:
+                        all_stat = TopTopicsStat(
+                            topic=topic,
+                            user_id=author,
+                            language='all',
+                            times=0,
+                            impact_score=2
+                            )
 
-                    if topic not in topics[language]:
-                        topics[language][topic] = {
-                                    'topic': topic,
-                                    'times': 0,
-                                    'user_id': tweet.author_id
-                                }
-                    topics['all'][topic]['times'] += 1
-                    topics[language][topic]['times'] += 1
+                    all_stat.times += 1
+                    all_stat.impact_score += score
+                    all_stat.save()
 
-        for language in topics:
-            for topic_name in topics[language]:
-                topic = topics[language][topic_name] 
-                TopTopicsStat(
-                    topic=topic['topic'],
-                    times=topic['times'],
-                    user_id=topic['user_id'],
-                    language=language
-                    ).save()
+                    lang_stat = TopTopicsStats.find(topic, language, author)
+                    if not lang_stat:
+                        lang_stat = TopTopicsStat(
+                            topic=topic,
+                            user_id=author,
+                            language=language,
+                            times=0,
+                            impact_score=2
+                            )
+
+                    lang_stat.times += 1
+                    lang_stat.impact_score += score
+                    lang_stat.save()

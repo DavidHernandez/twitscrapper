@@ -32,8 +32,16 @@ class TopTopicsStats:
     def clear():
         return TopTopicsStat.objects().delete()
 
+    @staticmethod
+    def find(topic, language, user):
+        return TopTopicsStat.objects(topic=topic, language=language, user_id=user).first()
+
 class TopTagsStats:
 
     @staticmethod
     def clear():
         return TopTagsStat.objects().delete()
+
+    @staticmethod
+    def find(tag, language, user):
+        return TopTagsStat.objects(tag=tag, language=language, user_id=user).first()

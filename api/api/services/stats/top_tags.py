@@ -10,42 +10,41 @@ class TopTags:
         TopTagsStats.clear()
 
         tweets = Tweets.with_tags()
-        tags = {}
-        tags['all'] = {}
-        for tweet in tweets:
-            language = tweet.language
-            if language not in tags:
-                tags[language] = {}
 
+        for tweet in tweets:
             tagged = tweet.tagged
 
             for tagged_kb in tagged:
                 for tag in tagged_kb.tags:
                     tag_name = tag.tag
+                    author = tweet.author_id
+                    language = tweet.language
+                    score = tweet.impact_score
 
-                    if tag_name not in tags['all']:
-                        tags['all'][tag_name] = {
-                                    'tag': tag_name,
-                                    'times': 0,
-                                    'user_id': tweet.author_id
-                                }
+                    all_stat = TopTagsStats.find(tag_name, 'all', author)
+                    if not all_stat:
+                        all_stat = TopTagsStat(
+                            tag=tag_name,
+                            user_id=author,
+                            language='all',
+                            times=0,
+                            impact_score=2
+                            )
 
-                    if tag_name not in tags[language]:
-                        tags[language][tag_name] = {
-                                    'tag': tag_name,
-                                    'times': 0,
-                                    'user_id': tweet.author_id
-                                }
-                    tags['all'][tag_name]['times'] += 1
-                    tags[language][tag_name]['times'] += 1
+                    all_stat.times += 1
+                    all_stat.impact_score += score
+                    all_stat.save()
 
+                    lang_stat = TopTagsStats.find(tag_name, language, author)
+                    if not lang_stat:
+                        lang_stat = TopTagsStat(
+                            tag=tag_name,
+                            user_id=author,
+                            language=language,
+                            times=0,
+                            impact_score=2
+                            )
 
-        for language in tags:
-            for tag_name in tags[language]:
-                tag = tags[language][tag_name] 
-                TopTagsStat(
-                    tag=tag['tag'],
-                    times=tag['times'],
-                    user_id=tag['user_id'],
-                    language=language
-                    ).save()
+                    lang_stat.times += 1
+                    lang_stat.impact_score += score
+                    lang_stat.save()
