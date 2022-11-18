@@ -11,6 +11,7 @@ from api.services.stats.top_mentions import TopMentions
 from api.services.stats.top_tags import TopTags
 from api.services.stats.top_topics import TopTopics
 from api.services.tag_updater import TagUpdater
+from api.services.tweet_importer import TweetImporter
 
 
 def run_command(arguments):
@@ -60,6 +61,7 @@ commands = {
     'top_tags': TopTags.calculate,
     'add_extra': User.add_extra,
     'user_delete': User.delete,
+    'import': TweetImporter.import_file,
 }
 
 args = sys.argv
